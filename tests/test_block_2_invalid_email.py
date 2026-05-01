@@ -1,4 +1,3 @@
-import time
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from locators.locators import AuthLocators
@@ -6,22 +5,12 @@ from locators.locators import AuthLocators
 class TestBlock2InvalidEmail:
     
     def test_registration_with_invalid_email(self, driver):
-        # Нажать кнопку «Вход и регистрация»
         driver.wait.until(EC.element_to_be_clickable(AuthLocators.LOGIN_REG_BUTTON)).click()
-        
-        # Нажать кнопку «Нет аккаунта»
         driver.wait.until(EC.element_to_be_clickable(AuthLocators.NO_ACCOUNT_BUTTON)).click()
         
-        # Заполнить поле Email формы регистрации
         driver.find_element(*AuthLocators.EMAIL_FIELD).send_keys("wrongemail")
+        driver.find_element(*AuthLocators.CREATE_BUTTON).click()
         
-        # Нажать кнопку «Создать аккаунт»
-        driver.wait.until(EC.element_to_be_clickable(AuthLocators.CREATE_BUTTON)).click()
-        
-        # Небольшая пауза для появления сообщений об ошибках
-        time.sleep(1)
-        
-        # Проверить: поля Email, Пароль, Повторите пароль выделены красным
         email_parent = driver.find_element(*AuthLocators.EMAIL_FIELD).find_element(By.XPATH, "..")
         password_parent = driver.find_element(*AuthLocators.PASSWORD_FIELD).find_element(By.XPATH, "..")
         confirm_parent = driver.find_element(*AuthLocators.CONFIRM_PASSWORD_FIELD).find_element(By.XPATH, "..")
@@ -30,6 +19,5 @@ class TestBlock2InvalidEmail:
         assert "input_inputError" in password_parent.get_attribute("class")
         assert "input_inputError" in confirm_parent.get_attribute("class")
         
-        # Проверить: под полем Email сообщение «Ошибка»
         error_text = driver.find_element(*AuthLocators.ERROR_MESSAGE).text
         assert "Ошибка" in error_text

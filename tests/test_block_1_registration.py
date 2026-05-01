@@ -1,17 +1,12 @@
-import time
 from selenium.webdriver.support import expected_conditions as EC
 from locators.locators import AuthLocators
-
-def generate_unique_email():
-    return f"test_user_{int(time.time() * 1000)}@test.ru"
+from utils.helpers import generate_unique_email
 
 class TestBlock1Registration:
     
     def test_successful_registration(self, driver):
         driver.wait.until(EC.element_to_be_clickable(AuthLocators.LOGIN_REG_BUTTON)).click()
         driver.wait.until(EC.element_to_be_clickable(AuthLocators.NO_ACCOUNT_BUTTON)).click()
-        
-        time.sleep(2)
         
         email = generate_unique_email()
         driver.find_element(*AuthLocators.EMAIL_FIELD).send_keys(email)
